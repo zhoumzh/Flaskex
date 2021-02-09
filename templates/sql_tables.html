@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+    {% include "navbar.html" %}
+    <section class="hero is-primary is-bold is-large">
+        <label for="sql">sql:</label><textarea id="sql" cols="200" rows="27"></textarea>
+        <button>复制结果</button>
+        <button onclick="doGet()">执行分析sql中用到的所有表</button>
+        <label for="t-res">结果:</label><textarea id="t-res" readonly rows="21" style="font-size:x-large;color:darkblue "></textarea>
+        <div class="hero-body">
+        </div>
+    </section>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+        function doGet() {
+            $.post('/do-get-tables', {
+                    data: $("#sql").val()
+                },
+                function (data) {
+                    $("#t-res").val(eval(data))
+                }
+            )
+            ;
+        }
+    </script>
+{% endblock %}

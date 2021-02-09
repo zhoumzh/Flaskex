@@ -1,3 +1,6 @@
+body{
+  padding: 1%;
+}
 .login-input {
   width: 130px;
 }

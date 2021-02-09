@@ -1,39 +1,26 @@
 # -*- coding: utf-8 -*-
 
-from scripts import tabledef
-from scripts import forms
-from scripts import helpers
-from flask import Flask, redirect, url_for, render_template, request, session
 import json
-import sys
 import os
+
+from flask import Flask, redirect, url_for, request, session, render_template
+
+from scripts.functions import get_sql_table as gst
+from scripts.functions import quote_str_list as qs
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
 
+
 # Heroku
-#from flask_heroku import Heroku
-#heroku = Heroku(app)
+# from flask_heroku import Heroku
+# heroku = Heroku(app)
 
 # ======== Routing =========================================================== #
 # -------- Login ------------------------------------------------------------- #
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    if not session.get('logged_in'):
-        form = forms.LoginForm(request.form)
-        if request.method == 'POST':
-            username = request.form['username'].lower()
-            password = request.form['password']
-            if form.validate():
-                if helpers.credentials_valid(username, password):
-                    session['logged_in'] = True
-                    session['username'] = username
-                    return json.dumps({'status': 'Login successful'})
-                return json.dumps({'status': 'Invalid user/pass'})
-            return json.dumps({'status': 'Both fields required'})
-        return render_template('login.html', form=form)
-    user = helpers.get_user()
-    return render_template('home.html', user=user)
+    return render_template('sql_tables.html')
 
 
 @app.route("/logout")
@@ -42,41 +29,20 @@ def logout():
     return redirect(url_for('login'))
 
 
-# -------- Signup ---------------------------------------------------------- #
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if not session.get('logged_in'):
-        form = forms.LoginForm(request.form)
-        if request.method == 'POST':
-            username = request.form['username'].lower()
-            password = helpers.hash_password(request.form['password'])
-            email = request.form['email']
-            if form.validate():
-                if not helpers.username_taken(username):
-                    helpers.add_user(username, password, email)
-                    session['logged_in'] = True
-                    session['username'] = username
-                    return json.dumps({'status': 'Signup successful'})
-                return json.dumps({'status': 'Username taken'})
-            return json.dumps({'status': 'User/Pass required'})
-        return render_template('login.html', form=form)
-    return redirect(url_for('login'))
+@app.route('/do-get-tables', methods=['POST'])
+def do_get_tables():
+    sql = request.form['data']
+    tables = gst.extract_table_name_from_sql(sql)
+    return json.dumps('\n'.join(tables))
 
 
-# -------- Settings ---------------------------------------------------------- #
-@app.route('/settings', methods=['GET', 'POST'])
-def settings():
-    if session.get('logged_in'):
-        if request.method == 'POST':
-            password = request.form['password']
-            if password != "":
-                password = helpers.hash_password(password)
-            email = request.form['email']
-            helpers.change_user(password=password, email=email)
-            return json.dumps({'status': 'Saved'})
-        user = helpers.get_user()
-        return render_template('settings.html', user=user)
-    return redirect(url_for('login'))
+@app.route('/do-quote-strs', methods=['POST'])
+def do_quote_str():
+    data = json.loads(request.get_data(as_text=True))
+    pre = '"' if data['pre'] is None else data['pre']
+    after = data['after'] if data['after'] is None else '"'
+    ls = qs.quote(data['txt'], data['df'], pre, after)
+    return json.dumps('\n'.join(ls))
 
 
 # ======== Main ============================================================== #
