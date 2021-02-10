@@ -36,6 +36,9 @@ def update_codes():
 def start():
     lines = os.popen("nohup py app.py > app.log &").readlines()
     print(lines)
+    f = open('app.log', 'r')
+    for line in f.readlines():
+        print(line)
 
 
 if __name__ == "__main__":
