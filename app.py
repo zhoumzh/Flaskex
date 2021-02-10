@@ -2,6 +2,7 @@
 
 import json
 import os
+import time
 
 from flask import Flask, redirect, url_for, request, session, render_template
 
@@ -75,3 +76,4 @@ def do_format_sql():
 # ======== Main ============================================================== #
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=True, host="0.0.0.0")
+    print("服务启动成功@", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
