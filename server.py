@@ -4,7 +4,7 @@ import sys
 
 def kill_process_by_name():
     n = "app.py"
-    cmd = "ps -e | grep 'app.py'"
+    cmd = "ps -ef | grep 'app.py'"
     f = os.popen(cmd)
     txt = f.readlines()
     if len(txt) == 0:
