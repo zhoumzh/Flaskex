@@ -4,7 +4,7 @@ import sys
 
 def kill_process_by_name():
     cmd = "ps -ef | grep 'app.py'"
-    print(cmd)
+    print("准备杀掉现有进程...", cmd)
     f = os.popen(cmd)
     txt = f.readlines()
     if len(txt) == 0:
@@ -25,6 +25,7 @@ def kill_process_by_name():
 
 def update_codes():
     print(sys.path[0])
+    print("准备更新代码...")
     os.system("cd " + sys.path[0])
     lines = os.popen("git pull").readlines()
     print(lines)
