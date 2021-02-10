@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="container-fluid">
+
+    <div class="am-form-group">
+        <label for="sourceText" class="antiquewhite-color">源文本:</label>
+        <textarea class="" rows="10" cols="140" id="sourceText"></textarea>
+    </div>
+
+    <div class="am-input-group">
+        <span class="am-input-group-label">前缀</span>
+        <input type="text" class="am-form-field" placeholder="前缀">
+    </div>
+
+    <div class="am-input-group">
+        <span class="am-input-group-label">后缀</span>
+        <input type="text" class="am-form-field" placeholder="后缀">
+    </div>
+
+    <div class="am-form-group">
+        <label for="doc-select-1">常见后缀</label>
+        <select id="doc-select-1">
+            <option value="option1">,</option>
+            <option value="option2">}</option>
+            <option value="option3">"</option>
+            <option value="option3">'</option>
+        </select>
+        <span class="am-form-caret"></span>
+    </div>
+
+    <button type="button" class="am-btn am-btn-default" onclick="doGet()">开始处理</button>
+
+    <div class="am-form-group" style="margin-top: 20px;">
+        <label for="t-res" class="antiquewhite-color">结果:</label>
+        <textarea class="" rows="10" cols="140" id="t-res" readonly></textarea>
+    </div>
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    function doGet() {
+        $.post('/do-get-tables', {
+            data: $("#sourceText").val()
+        },
+            function (data) {
+                $("#t-res").val(eval(data))
+            }
+        )
+            ;
+    }
+</script>
+{% endblock %}
+
+{% block styles %}
+<style>
+</style>
+{% endblock %}
