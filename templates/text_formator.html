@@ -9,18 +9,22 @@
     </div>
 
     <div class="am-g" style="margin-left: 65px;">
-        <div class="am-u-sm-4 am-input-group">
+        <div class="am-u-sm-3 am-input-group">
             <span class="am-input-group-label">前缀</span>
-            <input type="text" class="am-form-field" placeholder="前缀">
+            <input id="prefix" type="text" class="am-form-field" placeholder="前缀">
         </div>
-        <div class="am-u-sm-4 am-input-group">
+        <div class="am-u-sm-3 am-input-group">
+            <span class="am-input-group-label">分隔符</span>
+            <input id="df" type="text" class="am-form-field" placeholder="分隔符">
+        </div>
+        <div class="am-u-sm-3 am-input-group">
             <span class="am-input-group-label">后缀</span>
-            <input type="text" class="am-form-field" placeholder="后缀">
+            <input id="postfix" type="text" class="am-form-field" placeholder="后缀">
         </div>
-        <div class="am-u-sm-4 am-input-group">
+        <div class="am-u-sm-3 am-input-group">
             <label for="doc-select-1">常见后缀</label>
-            <select id="doc-select-1" style="width: 100px;">
-                <option value="option1">,</option>
+            <select id="commonPostfix" style="width: 100px;">
+                <option value="option1" selected>,</option>
                 <option value="option2">}</option>
                 <option value="option3">"</option>
                 <option value="option3">'</option>
@@ -42,9 +46,13 @@
 {% block scripts %}
 <script>
     function doGet() {
-        $.post('/do-get-tables', {
-            data: $("#sourceText").val()
-        },
+        let req = {
+            txt: $("#sourceText").val(),
+            df: $("#df").val(),
+            pre: $("#prefix").val(),
+            after: !!$("#postfix").val() ? $("#postfix").val() : $("#commonPostfix option:selected").text()
+        }
+        $.post('/do-quote-strs', JSON.stringify(req),
             function (data) {
                 $("#t-res").val(eval(data))
             }
