@@ -3,8 +3,8 @@ import sys
 
 
 def kill_process_by_name():
-    n = "app.py"
     cmd = "ps -ef | grep 'app.py'"
+    print(cmd)
     f = os.popen(cmd)
     txt = f.readlines()
     if len(txt) == 0:
