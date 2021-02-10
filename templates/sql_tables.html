@@ -1,26 +1,34 @@
 {% extends "base.html" %}
 {% block body %}
-    {% include "navbar.html" %}
-    <section class="hero is-primary is-bold is-large">
-        <label for="sql">sql:</label><textarea id="sql" cols="200" rows="27"></textarea>
-        <button>复制结果</button>
-        <button onclick="doGet()">执行分析sql中用到的所有表</button>
-        <label for="t-res">结果:</label><textarea id="t-res" readonly rows="21" style="font-size:x-large;color:darkblue "></textarea>
-        <div class="hero-body">
-        </div>
-    </section>
+<div class="container-fluid">
+
+    <div class="am-form-group">
+        <label for="sql" class="antiquewhite-color">SQL:</label>
+        <textarea class="" rows="10" cols="140" id="sql"></textarea>
+    </div>
+
+    <button type="button" class="am-btn am-btn-default" >复制结果</button>
+
+    <button type="button" class="am-btn am-btn-default" onclick="doGet()" >执行分析sql中用到的所有表</button>
+
+    <div class="am-form-group" style="margin-top: 20px;">
+        <label for="t-res" class="antiquewhite-color">结果:</label>
+        <textarea class="" rows="10" cols="140" id="t-res" readonly></textarea>
+    </div>
+
+</div>
 {% endblock %}
 {% block scripts %}
-    <script type="text/javascript">
-        function doGet() {
-            $.post('/do-get-tables', {
-                    data: $("#sql").val()
-                },
-                function (data) {
-                    $("#t-res").val(eval(data))
-                }
-            )
+<script type="text/javascript">
+    function doGet() {
+        $.post('/do-get-tables', {
+            data: $("#sql").val()
+        },
+            function (data) {
+                $("#t-res").val(eval(data))
+            }
+        )
             ;
-        }
-    </script>
+    }
+</script>
 {% endblock %}

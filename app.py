@@ -19,10 +19,23 @@ app.secret_key = os.urandom(12)  # Generic key for dev purposes only
 
 # ======== Routing =========================================================== #
 # -------- Login ------------------------------------------------------------- #
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    return render_template('index.html')
+
+
+@app.route('/sql-tables', methods=['GET', 'POST'])
+def sqlTables():
     return render_template('sql_tables.html')
 
+@app.route('/text-formator', methods=['GET', 'POST'])
+def text_formator():
+    return render_template('text_formator.html')
+
+@app.route('/tables', methods=['GET', 'POST'])
+def tables():
+    return render_template('tables.html')
 
 @app.route("/logout")
 def logout():
