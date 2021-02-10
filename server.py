@@ -36,6 +36,6 @@ def start():
 
 
 if __name__ == "__main__":
-    kill_process_by_name()
     update_codes()
+    kill_process_by_name()
     start()
