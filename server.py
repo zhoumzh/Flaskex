@@ -7,12 +7,12 @@ def kill_process_by_name():
     print("准备杀掉现有进程...", cmd)
     f = os.popen(cmd)
     txt = f.readlines()
+    print(txt)
     if len(txt) == 0:
         print("no process !")
         return
     else:
         for line in txt:
-            print(line)
             columns = line.split()
             pid = columns[0]
             cmd = "kill -9 %d" % int(pid)
