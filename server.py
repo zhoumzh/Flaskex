@@ -3,7 +3,7 @@ import sys
 
 
 def kill_process_by_name():
-    n = "Flakes/app.py"
+    n = "app.py"
     cmd = "ps -e | grep %s" % n
     f = os.popen(cmd)
     txt = f.readlines()
