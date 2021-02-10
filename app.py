@@ -7,6 +7,7 @@ from flask import Flask, redirect, url_for, request, session, render_template
 
 from scripts.functions import get_sql_table as gst
 from scripts.functions import quote_str_list as qs
+from scripts.functions import formate_mybatis as fm
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
@@ -28,13 +29,16 @@ def login():
 def sqlTables():
     return render_template('sql_tables.html')
 
+
 @app.route('/text-formator', methods=['GET', 'POST'])
 def text_formator():
     return render_template('text_formator.html')
 
+
 @app.route('/tables', methods=['GET', 'POST'])
 def tables():
     return render_template('tables.html')
+
 
 @app.route("/logout")
 def logout():
@@ -53,9 +57,19 @@ def do_get_tables():
 def do_quote_str():
     data = json.loads(request.get_data(as_text=True))
     pre = '"' if data['pre'] is None else data['pre']
-    after = data['after'] if data['after'] is None else '"'
+    after = '"' if data['after'] is None else data['after']
     ls = qs.quote(data['txt'], data['df'], pre, after)
     return json.dumps('\n'.join(ls))
+
+
+@app.route('/do-format-msl', methods=['POST'])
+def do_format_sql():
+    data = request.form['data']
+    try:
+        res = fm.do_format(data)
+    except:
+        return "处理发生异常..."
+    return json.dumps('\n'.join(res))
 
 
 # ======== Main ============================================================== #
