@@ -14,6 +14,7 @@ def kill_process_by_name():
     else:
         for line in txt:
             columns = line.split()
+            print(columns)
             pid = columns[0]
             cmd = "kill -9 %d" % int(pid)
             rc = os.system(cmd)
