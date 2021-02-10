@@ -1,21 +1,20 @@
 {% extends "base.html" %}
 {% block body %}
-<div class="container-fluid">
-
-    <div class="am-form-group">
-        <label for="sql" class="antiquewhite-color">SQL:</label>
-        <textarea class="" rows="10" cols="140" id="sql"></textarea>
+<div class="container-fluid" style="height: calc(100vh - 50px)">
+    <div>
+        <div class="am-form-group">
+            <label for="sql" class="antiquewhite-color" style="width: 35px">SQL:</label>
+            <textarea class="" rows="10" style="width: 95%;border-radius:9px;" id="sql"></textarea>
+        </div>
+        <div style="margin-left: 39px; margin-top: 10px; margin-bottom: 10px">
+            <button type="button" class="am-btn am-btn-default" style="border-radius:9px;">复制结果</button>
+            <button type="button" class="am-btn am-btn-default" style="border-radius:9px;" onclick="doGet()" >执行分析sql中用到的所有表</button>
+        </div>
+        <div class="am-form-group" style="margin-top: 20px;">
+            <label for="t-res" class="antiquewhite-color">结果:</label>
+            <textarea class="" rows="10" style="width: 95%; border-radius:9px;" id="t-res" readonly></textarea>
+        </div>
     </div>
-
-    <button type="button" class="am-btn am-btn-default" >复制结果</button>
-
-    <button type="button" class="am-btn am-btn-default" onclick="doGet()" >执行分析sql中用到的所有表</button>
-
-    <div class="am-form-group" style="margin-top: 20px;">
-        <label for="t-res" class="antiquewhite-color">结果:</label>
-        <textarea class="" rows="10" cols="140" id="t-res" readonly></textarea>
-    </div>
-
 </div>
 {% endblock %}
 {% block scripts %}
