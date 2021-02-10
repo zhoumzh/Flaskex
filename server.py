@@ -4,11 +4,11 @@ import sys
 
 def kill_process_by_name():
     n = "app.py"
-    cmd = "ps -e | grep %s" % n
+    cmd = "ps -e | grep 'app.py'"
     f = os.popen(cmd)
     txt = f.readlines()
     if len(txt) == 0:
-        print("no process \"%s\"!!" % n)
+        print("no process !")
         return
     else:
         for line in txt:
