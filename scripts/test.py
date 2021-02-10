@@ -1,3 +1,5 @@
+from scripts.functions import formate_mybatis as fm
+
 p = [0, 2, 1, 3, 6, 8, 5]
 
 
@@ -15,4 +17,6 @@ def test_find(queue, target):
 
 
 if __name__ == '__main__':
-    print(test_find(p, 9))
+    lst = fm.deal_args(
+        "LW433B10LW40(Integer), 33B103M1004197(String), 3M1004197(String), 0(Integer), 44(Integer)")
+    print(lst)

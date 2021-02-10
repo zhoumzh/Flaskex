@@ -29,13 +29,16 @@ def login():
 def sqlTables():
     return render_template('sql_tables.html')
 
+
 @app.route('/text-formator', methods=['GET', 'POST'])
 def text_formator():
     return render_template('text_formator.html')
 
+
 @app.route('/tables', methods=['GET', 'POST'])
 def tables():
     return render_template('tables.html')
+
 
 @app.route("/logout")
 def logout():
@@ -62,7 +65,10 @@ def do_quote_str():
 @app.route('/do-format-msl', methods=['POST'])
 def do_format_sql():
     data = request.form['data']
-    res = fm.do_format(data)
+    try:
+        res = fm.do_format(data)
+    except:
+        return "处理发生异常..."
     return json.dumps('\n'.join(res))
 
 
