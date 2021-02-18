@@ -75,7 +75,14 @@
                                 <div class="am-u-sm-4 am-input-group">
                                     <label for="df"  class="am-u-sm-2 am-form-label">分隔符:</label>
                                     <div  class="am-u-sm-10">
-                                        <input id="df" type="text" placeholder="分隔符" value='"'>
+                                        <input id="df" type="text" placeholder="分隔符" value=',' style="visibility:visible;">
+                                        <select id="commonPostfix" style="width: 100px; visibility: hidden;">
+                                            <option value="option1" selected>,</option>
+                                            <option value="option2">\n</option>
+                                            <option value="option3">"</option>
+                                            <option value="option4">'</option>
+                                            <option value="option5">自定义</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="am-u-sm-4 am-input-group">
@@ -96,6 +103,7 @@
                             </div>
                             <div class="am-form-group" style="text-align: center;">
                                 <button id="copie" style="float: none;" type="button" class="page-header-button"><span class="am-icon-copy"></span> Copie</button>
+                                <button id="reset" style="float: none;" type="button" class="page-header-button"><span class="am-icon-refresh"></span> Reset</button>
                             </div>
                         </form>
                     </div>
@@ -131,14 +139,18 @@
                 $('#copie').popover({content: 'Copie Success!', theme: 'success'});
                 $(this).popover('open');
             });
+            $("#reset").focus(function(){
+                $("#t-res").val("");
+            });
+            $("#commonPostfix").
         });
     function doGet() {
         let req = {
             txt: $("#sourceText").val(),
             df: $("#df").val(),
             pre: $("#prefix").val(),
-            // after: !!$("#postfix").val() ? $("#postfix").val() : $("#commonPostfix option:selected").text()
-            after: $("#postfix").val()
+            after: !!$("#postfix").val() ? $("#postfix").val() : $("#commonPostfix option:selected").text()
+            // after: $("#postfix").val()
         }
         $.post('/do-quote-strs', JSON.stringify(req),
             function (data) {

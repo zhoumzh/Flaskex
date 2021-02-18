@@ -44,6 +44,7 @@
                                 </div>
                                 <div class="am-form-group" style="text-align: center;">
                                     <button id="copie" style="float: none;" type="button" class="page-header-button"><span class="am-icon-copy"></span> Copie</button>
+                                    <button id="reset" style="float: none;" type="button" class="page-header-button"><span class="am-icon-refresh"></span> Reset</button>
                                 </div>
                             </form>
                         </div>
@@ -79,6 +80,9 @@
                         $("#target").val(data);
                     }
                 );
+            });
+            $("#reset").focus(function(){
+                $("#target").val("");
             });
             $("#original").blur(function(){
                 this.style.overflow="hidden";
