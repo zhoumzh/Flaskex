@@ -29,6 +29,9 @@ def login():
 def sqlTables():
     return render_template('sql_tables.html')
 
+@app.route('/mybatis-log-format', methods=['GET'])
+def mybatisLogFormat():
+    return render_template('mybatis_log_format.html')
 
 @app.route('/text-formator', methods=['GET', 'POST'])
 def text_formator():
@@ -67,7 +70,8 @@ def do_format_sql():
     data = request.form['data']
     try:
         res = fm.do_format(data)
-    except:
+    except Exception as ex:
+        print("出现如下异常%s"%ex)
         return "处理发生异常..."
     return json.dumps('\n'.join(res))
 
