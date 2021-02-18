@@ -142,15 +142,14 @@
             $("#reset").focus(function(){
                 $("#t-res").val("");
             });
-            $("#commonPostfix").
         });
     function doGet() {
         let req = {
             txt: $("#sourceText").val(),
             df: $("#df").val(),
             pre: $("#prefix").val(),
-            after: !!$("#postfix").val() ? $("#postfix").val() : $("#commonPostfix option:selected").text()
-            // after: $("#postfix").val()
+            // after: !!$("#postfix").val() ? $("#postfix").val() : $("#commonPostfix option:selected").text()
+            after: $("#postfix").val()
         }
         $.post('/do-quote-strs', JSON.stringify(req),
             function (data) {
