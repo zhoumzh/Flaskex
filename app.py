@@ -23,7 +23,7 @@ app.secret_key = os.urandom(12)  # Generic key for dev purposes only
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    return render_template('index.html')
+    return render_template('sql_tables.html')
 
 
 @app.route('/sql-tables', methods=['GET', 'POST'])
