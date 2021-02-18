@@ -402,6 +402,7 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   border-bottom: 0;
   padding-left: 20px;
   padding-right: 20px;
+  height: calc(100vh - 50px)
 }
 .antiquewhite-color{
   color: antiquewhite;
