@@ -51,6 +51,7 @@
                             </div>
                             <div class="am-form-group" style="text-align: center;">
                                 <button id="copie" style="float: none;" type="button" class="page-header-button"><span class="am-icon-copy"></span> Copie</button>
+                                <button id="reset" style="float: none;" type="button" class="page-header-button"><span class="am-icon-refresh"></span> Reset</button>
                             </div>
                         </form>
                     </div>
@@ -74,6 +75,9 @@
         });
         $("#t-res").focus(function(){
             this.style.overflow="auto";
+        });
+        $("#reset").focus(function(){
+            $("#t-res").val("");
         });
         $('#copie').click(function () {
             $("#t-res").select();
