@@ -30,7 +30,7 @@
                                 <div class="am-form-group">
                                     <label for="user-intro" class="am-u-sm-1 am-form-label">Log</label>
                                     <div class="am-u-sm-11">
-                                        <textarea id="original" style="white-space:nowrap; overflow:scroll;"  class="" rows="10" id="user-intro" placeholder="please input log"></textarea>
+                                        <textarea id="original" style="white-space:nowrap; overflow:auto;"  class="" rows="10" id="user-intro" placeholder="please input log"></textarea>
                                     </div>
                                 </div>
                                 <div class="am-form-group" style="text-align: center;">
@@ -39,7 +39,7 @@
                                 <div class="am-form-group">
                                     <label for="user-intro" class="am-u-sm-1 am-form-label">SQL</label>
                                     <div class="am-u-sm-11">
-                                        <textarea id="target" style="white-space:nowrap; overflow:scroll;"  class="" rows="10" id="user-intro" placeholder="don't input"></textarea>
+                                        <textarea id="target" style="white-space:nowrap; overflow:auto;"  class="" rows="10" id="user-intro" placeholder="don't input"></textarea>
                                     </div>
                                 </div>
                                 <div class="am-form-group" style="text-align: center;">
@@ -80,6 +80,19 @@
                     }
                 );
             });
+            $("#original").blur(function(){
+                this.style.overflow="hidden";
+            });
+            $("#original").focus(function(){
+                this.style.overflow="auto";
+            });
+            $("#target").blur(function(){
+                this.style.overflow="hidden";
+            });
+            $("#target").focus(function(){
+                this.style.overflow="auto";
+            });
         });
+
     </script>
 {% endblock %}

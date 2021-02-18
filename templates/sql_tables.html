@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 <div class="container-fluid">
-    <div>
+    <!-- <div>
         <div class="am-form-group">
             <label for="sql" class="antiquewhite-color" style="width: 35px">SQL:</label>
             <textarea class="" rows="10" style="width: 95%;border-radius:9px;" id="sql"></textarea>
@@ -14,11 +14,74 @@
             <label for="t-res" class="antiquewhite-color">结果:</label>
             <textarea class="" rows="10" style="width: 95%; border-radius:9px;" id="t-res" readonly></textarea>
         </div>
+    </div> -->
+
+    <!-- new style -->
+
+
+
+    <!-- 内容区域 -->
+    <div class="am-cf">
+        <div class="row">
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"></span> SQL Tables</div>
+            </div>
+        </div>
+    </div>
+    <div class="row-content am-cf">
+        <div class="row">
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                <div class="widget am-cf">
+                    <div class="widget-body am-fr">
+                        <form class="am-form tpl-form-line-form">
+                            <div class="am-form-group">
+                                <label for="user-intro" class="am-u-sm-1 am-form-label">SQL:</label>
+                                <div class="am-u-sm-11">
+                                    <textarea id="sql" style="white-space:nowrap; overflow:auto;"  class="" rows="10" id="user-intro" placeholder="please input"></textarea>
+                                </div>
+                            </div>
+                            <div class="am-form-group" style="text-align: center;">
+                                <button id="format" style="float: none;" type="button" class="page-header-button"  onclick="doGet()"><span class="am-icon-paint-brush"></span>执行分析sql中用到的所有表</button>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-intro" class="am-u-sm-1 am-form-label">结果:</label>
+                                <div class="am-u-sm-11">
+                                    <textarea id="t-res" style="overflow:auto;" readonly class="" rows="10" id="user-intro" placeholder="don't input"></textarea>
+                                </div>
+                            </div>
+                            <div class="am-form-group" style="text-align: center;">
+                                <button id="copie" style="float: none;" type="button" class="page-header-button"><span class="am-icon-copy"></span> Copie</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
 {% block scripts %}
-<script type="text/javascript">
+<script type="text/javascript">    
+    $(document).ready(function() {
+        $("#sql").blur(function(){
+            this.style.overflow="hidden";
+        });
+        $("#sql").focus(function(){
+            this.style.overflow="auto";
+        });
+        $("#t-res").blur(function(){
+            this.style.overflow="hidden";
+        });
+        $("#t-res").focus(function(){
+            this.style.overflow="auto";
+        });
+        $('#copie').click(function () {
+            $("#t-res").select();
+            document.execCommand("Copy");
+            $('#copie').popover({content: 'Copie Success!', theme: 'success'});
+            $(this).popover('open');
+        });
+    });
     function doGet() {
         $.post('/do-get-tables', {
             data: $("#sql").val()
