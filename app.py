@@ -4,13 +4,12 @@ import json
 import os
 import time
 import traceback
-import server
 
 from flask import Flask, redirect, url_for, request, session, render_template
 
+from scripts.functions import formate_mybatis as fm
 from scripts.functions import get_sql_table as gst
 from scripts.functions import quote_str_list as qs
-from scripts.functions import formate_mybatis as fm
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
@@ -30,8 +29,9 @@ def login():
 
 @app.route('/restart', methods=['GET'])
 def restart():
-    res = server.do_update_restart()
-    return '\n'.join(res)
+    lines = os.popen("py server.py > bin.log").readlines()
+    print(lines)
+    return '\n'.join(lines)
 
 
 @app.route('/sql-tables', methods=['GET', 'POST'])
