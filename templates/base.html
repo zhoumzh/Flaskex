@@ -112,7 +112,7 @@
         nclickEvent(4, btn, function (event, n) {
             $.get('/restart', function (data) {
                 data = data ? data : '无更新代码!'
-                $('#logo-img').popover({content: eval(data), theme: 'success'});
+                $('#logo-img').popover({content: data, theme: 'success'});
                 setTimeout(function () {
                     $(btn).attr('class', 'am-animation-slide-bottom')
                 }, 600)
