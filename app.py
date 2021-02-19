@@ -29,9 +29,7 @@ def login():
 
 @app.route('/restart', methods=['GET'])
 def restart():
-    lines = os.popen("py server.py > bin.log").readlines()
-    print(lines)
-    return '\n'.join(lines)
+    return os.system("py server.py > bin.log")
 
 
 @app.route('/sql-tables', methods=['GET', 'POST'])
