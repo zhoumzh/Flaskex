@@ -4,6 +4,7 @@ import json
 import os
 import time
 import traceback
+import server
 
 from flask import Flask, redirect, url_for, request, session, render_template
 
@@ -25,6 +26,12 @@ app.secret_key = os.urandom(12)  # Generic key for dev purposes only
 @app.route('/', methods=['GET', 'POST'])
 def login():
     return render_template('sql_tables.html')
+
+
+@app.route('/restart', methods=['GET'])
+def restart():
+    res = server.do_update_restart()
+    return '\n'.join(res)
 
 
 @app.route('/sql-tables', methods=['GET', 'POST'])

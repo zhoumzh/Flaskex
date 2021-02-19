@@ -2,55 +2,54 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="Anthony Federico" content="Flaskex">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="../static/css/style.css" />
+    <meta charset="utf-8">
+    <meta name="Anthony Federico" content="Flaskex">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/css/style.css"/>
 
-  <script src="../static/js/scripts.js"></script>
-  <link rel="icon" type="image/png" href="../static/assets/i/favicon.png">
-  <link rel="apple-touch-icon-precomposed" href="../static/assets/i/app-icon72x72@2x.png">
-  <link rel="stylesheet" href="../static/assets/css/amazeui.min.css" />
-  <link rel="stylesheet" href="../static/assets/css/amazeui.datatables.min.css" />
-  <link rel="stylesheet" href="../static/assets/css/app.css">
-  <script src="../static/assets/js/jquery.min.js"></script>
+    <script src="../static/js/scripts.js"></script>
+    <link rel="icon" type="image/png" href="../static/assets/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="../static/assets/i/app-icon72x72@2x.png">
+    <link rel="stylesheet" href="../static/assets/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="../static/assets/css/amazeui.datatables.min.css"/>
+    <link rel="stylesheet" href="../static/assets/css/app.css">
+    <script src="../static/assets/js/jquery.min.js"></script>
 
 </head>
 
 <body data-type="index" class="am-with-topbar-fixed-top">
-  <script src="../static/assets/js/theme.js"></script>
-  <div class="am-g tpl-g">
+<script src="../static/assets/js/theme.js"></script>
+<div class="am-g tpl-g">
     <!-- 头部 -->
     <header style="background-color:#666" class="am-topbar am-topbar-inverse">
-      <!-- logo -->
-      <div class="am-fl tpl-header-logo">
-        <a href="javascript:;"><img src="../static/assets/img/malu.png" alt=""></a>
-      </div>
-      <!-- 右侧内容 -->
-      <div>
-        <ul class="am-fl tpl-header-navbar">
-          <li><a href="/sql-tables">SQL Tables</a></li>
-          <li><a href="/text-formator">Text Quote</a></li>
-          <li><a href="/mybatis-log-format">Mybatis Log Format</a></li>
-        </ul>
-      </div>
-      <!-- 风格切换 -->
-      <!-- <div class="tpl-skiner">
-        <div class="tpl-skiner-toggle am-icon-cog">
+        <!-- logo -->
+        <div class="am-fl tpl-header-logo">
+            <a id="logo" href="javascript:void(0);"><img id="logo-img" src="../static/assets/img/malu.png" alt=""></a>
         </div>
-        <div class="tpl-skiner-content">
-          <div class="tpl-skiner-content-title">
-            选择主题
-          </div>
-          <div class="tpl-skiner-content-bar">
-            <span class="skiner-color skiner-white" data-color="theme-white"></span>
-            <span class="skiner-color skiner-black" data-color="theme-black"></span>
-          </div>
+        <!-- 右侧内容 -->
+        <div>
+            <ul class="am-fl tpl-header-navbar">
+                <li><a href="/sql-tables">SQL Tables</a></li>
+                <li><a href="/text-formator">Text Quote</a></li>
+                <li><a href="/mybatis-log-format">Mybatis Log Format</a></li>
+            </ul>
         </div>
-      </div> -->
+        <!-- 风格切换 -->
+        <!-- <div class="tpl-skiner">
+          <div class="tpl-skiner-toggle am-icon-cog">
+          </div>
+          <div class="tpl-skiner-content">
+            <div class="tpl-skiner-content-title">
+              选择主题
+            </div>
+            <div class="tpl-skiner-content-bar">
+              <span class="skiner-color skiner-white" data-color="theme-white"></span>
+              <span class="skiner-color skiner-black" data-color="theme-black"></span>
+            </div>
+          </div>
+        </div> -->
     </header>
-
 
 
     {% block body %}{% endblock %}
@@ -58,10 +57,65 @@
     {% block styles %}{% endblock %}
 
 
+    <script src="../static/assets/js/amazeui.min.js"></script>
+    <script src="../static/assets/js/amazeui.datatables.min.js"></script>
+    <script src="../static/assets/js/dataTables.responsive.min.js"></script>
+    <script src="../static/assets/js/app.js"></script>
+    <script type="text/javascript">
+        function nclickEvent(n, dom, fn) {
+            dom.removeEventListener('dblclick', null);
+            var n = parseInt(n) < 1 ? 1 : parseInt(n),
+                count = 0,
+                lastTime = 0;//用于记录上次结束的时间
+            var handler = function (event) {
+                var currentTime = new Date().getTime();//获取本次点击的时间
+                count = (currentTime - lastTime) < 300 ? count + 1 : 0;//如果本次点击的时间和上次结束时间相比大于300毫秒就把count置0
+                lastTime = new Date().getTime();
+                if (count >= n - 1) {
+                    fn(event, n);
+                    count = 0;
+                }
+            };
+            dom.addEventListener('click', handler);
+        }
+
+        function uniformMove(obj, attr, targetPosition, speed, time) {
+            clearInterval(obj.timer)
+            obj.timer = setInterval(function () {
+                //通过属性名获得属性值
+                //getStyle(obj,attr) 是字符串"~px"
+                var attrvalue = parseInt(getStyle(obj, attr));
+                //var attrvalue=parseInt(getComputedStyle(obj)[attr]);
+                if (Math.abs(targetPosition - attrvalue) <= Math.abs(speed)) {
+                    obj.style[attr] = targetPosition + "px";
+                    clearInterval(obj.timer);
+                } else {
+                    obj.style[attr] = attrvalue + speed + "px";
+                }
+                console.log("offset: " + attrvalue);
+            }, time);
+        }
+
+        function getStyle(obj, attr) {
+            if (obj.currentStyle) {
+                //支持IE
+                return obj.currentStyle[attr];
+            } else {
+                return getComputedStyle(obj)[attr];
+            }
+        }
+
+        var btn = document.getElementById('logo');
+
+        nclickEvent(4, btn, function (event, n) {
+            $(btn).popover({content: '即将自我更新与服务重启,请稍后刷新页面!', theme: 'danger'});
+            $.get('/restart', function () {
+                alert(0)
+            });
+            {#uniformMove(btn,null,)#}
+        })
+
+    </script>
 </body>
-<script src="../static/assets/js/amazeui.min.js"></script>
-<script src="../static/assets/js/amazeui.datatables.min.js"></script>
-<script src="../static/assets/js/dataTables.responsive.min.js"></script>
-<script src="../static/assets/js/app.js"></script>
 
 </html>
