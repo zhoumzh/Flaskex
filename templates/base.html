@@ -108,11 +108,10 @@
         var btn = document.getElementById('logo');
 
         nclickEvent(4, btn, function (event, n) {
-            $(btn).popover({content: '即将自我更新与服务重启,请稍后刷新页面!', theme: 'danger'});
-            $.get('/restart', function () {
-                alert(0)
+            $.get('/restart', function (data) {
+                data = data ? data : '无更新代码!'
+                $(btn).popover({content: data, theme: 'success'});
             });
-            {#uniformMove(btn,null,)#}
         })
 
     </script>

@@ -2,8 +2,10 @@
 
 import json
 import os
+import sys
 import time
 import traceback
+from server import update_codes as git_uc
 
 from flask import Flask, redirect, url_for, request, session, render_template
 
@@ -29,7 +31,10 @@ def login():
 
 @app.route('/restart', methods=['GET'])
 def restart():
-    return os.system("py server.py > bin.log")
+    lines = git_uc()
+    # py = sys.executable
+    # os.execl(py, py, *sys.argv)
+    return '\n'.join(lines)
 
 
 @app.route('/sql-tables', methods=['GET', 'POST'])
