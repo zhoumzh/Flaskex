@@ -3,48 +3,6 @@
 
 <div class="container-fluid">
 
-    <!-- <div class="am-form-group">
-        <label for="sourceText" class="antiquewhite-color">原始文本:</label>
-        <textarea class="" rows="10" cols="130" id="sourceText" style="width: 95%; border-radius:9px;"></textarea>
-    </div>
-
-    <div class="am-g" style="margin-left: 65px;">
-        <div class="am-u-sm-4 am-input-group">
-            <span class="am-input-group-label">前缀</span>
-            <input id="prefix" type="text" class="am-form-field" placeholder="前缀" value='"'>
-        </div>
-        <div class="am-u-sm-4 am-input-group">
-            <span class="am-input-group-label">分隔符</span>
-            <input id="df" type="text" class="am-form-field" placeholder="分隔符" value=",">
-        </div>
-        <div class="am-u-sm-4 am-input-group">
-            <span class="am-input-group-label">后缀</span>
-            <input id="postfix" type="text" class="am-form-field" placeholder="后缀" value='"'>
-        </div>
-        <div class="am-u-sm-3 am-input-group">
-            <label for="doc-select-1">常见后缀</label>
-            <select id="commonPostfix" style="width: 100px;">
-                <option value="option1" selected>,</option>
-                <option value="option2">}</option>
-                <option value="option3">"</option>
-                <option value="option3">'</option>
-            </select>
-            <span class="am-form-caret"></span>
-        </div> 
-      </div>
-
-    <button type="button" class="am-btn am-btn-primary am-btn-block" style="margin-top: 10px; margin-left: 75px; width: 95%;" onclick="doGet()">开始处理</button>
-
-    <div class="am-form-group" style="margin-top: 20px;">
-        <label for="t-res" class="antiquewhite-color">结果文本:</label>
-        <textarea class="" rows="10" cols="130" id="t-res" readonly style="width: 95%; border-radius:9px;"></textarea>
-    </div> -->
-
-
-    <!-- new style -->
-
-
-
     <!-- 内容区域 -->
     <div class="am-cf">
         <div class="row">
@@ -75,13 +33,14 @@
                                 <div class="am-u-sm-4 am-input-group">
                                     <label for="df"  class="am-u-sm-2 am-form-label">分隔符:</label>
                                     <div  class="am-u-sm-10">
-                                        <input id="df" type="text" placeholder="分隔符" value=',' style="visibility:visible;">
-                                        <select id="commonPostfix" style="width: 100px; visibility: hidden;">
-                                            <option value="option1" selected>,</option>
-                                            <option value="option2">\n</option>
-                                            <option value="option3">"</option>
-                                            <option value="option4">'</option>
-                                            <option value="option5">自定义</option>
+                                        <input id="df" type="text" placeholder="分隔符" value=',' style="display:none;width: 90%;">
+                                        <span id="back" class="am-icon-refresh" style="display:none;" onclick="refreshFn()"></span>
+                                        <select id="commonDf" style="display:block;" onchange="selectChangedFn(this.options[this.options.selectedIndex].value)">
+                                            <option value="1" selected>,</option>
+                                            <option value="2">\n</option>
+                                            <option value="3">"</option>
+                                            <option value="4">'</option>
+                                            <option value="5">自定义</option>
                                         </select>
                                     </div>
                                 </div>
@@ -117,6 +76,7 @@
 {% endblock %}
 {% block scripts %}
 <script>
+    let isCommon = true;
     $(document).ready(function() {
             $('#format').click(function () {
                 doGet();
@@ -146,17 +106,34 @@
     function doGet() {
         let req = {
             txt: $("#sourceText").val(),
-            df: $("#df").val(),
+            df: isCommon ? $("#commonDf option:selected").text() : $("#df").val(),
             pre: $("#prefix").val(),
             // after: !!$("#postfix").val() ? $("#postfix").val() : $("#commonPostfix option:selected").text()
             after: $("#postfix").val()
         }
-        $.post('/do-quote-strs', JSON.stringify(req),
+        let reqStr = JSON.stringify(req)
+        $.post('/do-quote-strs', reqStr,
             function (data) {
                 $("#t-res").val(eval(data))
             }
         )
             ;
+    }
+    function selectChangedFn(value) {
+        if (value === "5") {
+            $("#df").css("display", "inline")
+            $("#back").css("display", "inline")
+            $("#commonDf").css("display", "none");
+            isCommon = false
+        } else {
+
+        }
+    }
+    function refreshFn() {
+        $("#commonDf").val('1')
+        $("#commonDf").css("display", "block")
+        $("#df").css("display", "none");
+        $("#back").css("display", "none")
     }
 </script>
 {% endblock %}
