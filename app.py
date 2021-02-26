@@ -2,14 +2,16 @@
 
 import json
 import os
+import sys
 import time
 import traceback
+from server import update_codes as git_uc
 
 from flask import Flask, redirect, url_for, request, session, render_template
 
+from scripts.functions import formate_mybatis as fm
 from scripts.functions import get_sql_table as gst
 from scripts.functions import quote_str_list as qs
-from scripts.functions import formate_mybatis as fm
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
@@ -25,6 +27,14 @@ app.secret_key = os.urandom(12)  # Generic key for dev purposes only
 @app.route('/', methods=['GET', 'POST'])
 def login():
     return render_template('sql_tables.html')
+
+
+@app.route('/restart', methods=['GET'])
+def restart():
+    lines = git_uc()
+    # py = sys.executable
+    # os.execl(py, py, *sys.argv)
+    return '\n'.join(lines)
 
 
 @app.route('/sql-tables', methods=['GET', 'POST'])

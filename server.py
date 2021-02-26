@@ -31,14 +31,22 @@ def update_codes():
     os.system("cd " + sys.path[0])
     lines = os.popen("git pull").readlines()
     print(lines)
+    return lines
 
 
 def start():
     lines = os.popen("nohup py app.py > app.log &").readlines()
     print(lines)
+    return lines
+
+
+def do_update_restart():
+    res = []
+    res = res + update_codes()
+    kill_process_by_name()
+    res = res + start()
+    return res
 
 
 if __name__ == "__main__":
-    update_codes()
-    kill_process_by_name()
-    start()
+    do_update_restart()
