@@ -72,11 +72,11 @@ def do_get_tables():
 
 @app.route('/do-quote-strs', methods=['POST'])
 def do_quote_str():
-    data = json.loads(request.get_data(as_text=True))
+    data = request.form
     pre = '"' if data['pre'] is None else data['pre']
     after = '"' if data['after'] is None else data['after']
     ls = qs.quote(data['txt'], data['df'], pre, after)
-    return json.dumps('\n'.join(ls), ensure_ascii=False)
+    return json.dumps(ls, ensure_ascii=False)
 
 
 @app.route('/do-format-msl', methods=['POST'])
