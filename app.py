@@ -87,7 +87,7 @@ def do_format_sql():
     except Exception as ex:
         traceback.print_exc()
         return "处理发生异常:" + str(ex)
-    return json.dumps('\n'.join(res), ensure_ascii=False)
+    return json.dumps(res, ensure_ascii=False)
 
 
 # ======== Main ============================================================== #
