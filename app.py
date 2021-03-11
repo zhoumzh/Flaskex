@@ -7,7 +7,7 @@ import time
 import traceback
 from server import update_codes as git_uc
 
-from flask import Flask, redirect, url_for, request, session, render_template
+from flask import Flask, redirect, url_for, request, session, render_template, send_from_directory, Response
 
 from scripts.functions import formate_mybatis as fm
 from scripts.functions import get_sql_table as gst
@@ -57,12 +57,13 @@ def file_feed_back():
     return render_template('file_feed_back.html')
 
 
-
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
     return redirect(url_for('login'))
 
+
+# -----------------------------------------------------------
 
 @app.route('/do-get-tables', methods=['POST'])
 def do_get_tables():
@@ -93,5 +94,6 @@ def do_format_sql():
 
 # ======== Main ============================================================== #
 if __name__ == "__main__":
+    print(sys.path[0])
     print("服务启动@", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     app.run(debug=True, use_reloader=True, host="0.0.0.0")

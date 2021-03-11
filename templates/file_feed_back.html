@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block body %}
-<div class="container-fluid">
 
     <!-- 内容区域 -->
     <div class="am-cf">
@@ -15,6 +14,19 @@
             <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
                 <div class="widget am-cf">
                     <div class="widget-body am-fr">
+                        <div class="container-fluid">
+                            <code>curl -F "file=@/Users/master/Downloads/QQ20190309-190302@2x.png" http://localhost:5000/do-feed-back</code>
+                        <!-- <form action="/do-feed-back" method="POST" enctype="multipart/form-data">
+                            <input type="file" name="file" accept=".jpg,.png"/>
+                            <input type="submit"/>
+                        </form> -->
+                        <div class="am-form-group am-form-file" style="margin-top: 10px;">
+                            <button type="button" class="am-btn am-btn-danger am-btn-sm">
+                                <i class="am-icon-cloud-upload"></i> 选择要上传的文件
+                            </button>
+                            <input id="doc-form-file" type="file" multiple>
+                        </div>
+                        <div id="file-list"></div>
                         <form class="am-form tpl-form-line-form">
                             <table class="am-table">
                                 <thead>
@@ -55,7 +67,6 @@
 <script type="text/javascript">    
     //用于展示页面的函数
         function getList() {
-            init_chart();       // 给予ecahrts的绘图
             $.getJSON('/fileList', function (res) {         //请求userlist接口获取数据
                 var str = "";
                 $.each(res, function (i, v) {
@@ -71,7 +82,16 @@
             })
         }
 
+        $(document).ready(function() {
+            
         getList();
+        $('#doc-form-file').on('change', function() {
+            var fileNames = '';
+            $.each(this.files, function() {
+                fileNames += '<span class="am-badge">' + this.name + '</span> ';
+            });
+            $('#file-list').html(fileNames);
+        });
 
         $("#refresh-button").on('click', function() {
             getList();
@@ -94,5 +114,6 @@
                 alert("please input username and age!");   // 输入框中没输入name 或 age 直接 alter一个报错
             }
         });
+    });
 </script>
 {% endblock %}
