@@ -2,7 +2,6 @@
 
 import json
 import os
-import sys
 import time
 import traceback
 from server import update_codes as git_uc
@@ -57,12 +56,13 @@ def file_feed_back():
     return render_template('tables.html')
 
 
-
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
     return redirect(url_for('login'))
 
+
+# -----------------------------------------------------------
 
 @app.route('/do-get-tables', methods=['POST'])
 def do_get_tables():
@@ -89,6 +89,21 @@ def do_format_sql():
         traceback.print_exc()
         return "处理发生异常:" + str(ex)
     return json.dumps(res, ensure_ascii=False)
+
+
+Server_File_Path = "/Users/master/chj/data/flask/files"
+
+
+@app.route('/do-feed-back', methods=['POST'])
+def do_feed_back():
+    f = request.files['file']
+    exists = os.path.exists(Server_File_Path)
+    # 判断结果
+    if not exists:
+        os.makedirs(Server_File_Path)
+    s = time.strftime("%Y%m%d%H%M%S", time.localtime())
+    f.save(Server_File_Path + "/" + s + "|" + f.filename)
+    return "Ok"
 
 
 # ======== Main ============================================================== #
