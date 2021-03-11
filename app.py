@@ -7,7 +7,7 @@ import time
 import traceback
 from server import update_codes as git_uc
 
-from flask import Flask, redirect, url_for, request, session, render_template
+from flask import Flask, redirect, url_for, request, session, render_template, send_from_directory, Response
 
 from scripts.functions import formate_mybatis as fm
 from scripts.functions import get_sql_table as gst
@@ -90,22 +90,6 @@ def do_format_sql():
         traceback.print_exc()
         return "处理发生异常:" + str(ex)
     return json.dumps(res, ensure_ascii=False)
-
-
-@app.route('/do-feed-back', methods=['POST'])
-def do_feed_back():
-    f = request.files['file']
-    exists = os.path.exists(get_store_path())
-    # 判断结果
-    if not exists:
-        os.makedirs(get_store_path())
-    s = time.strftime("%Y%m%d%H%M%S", time.localtime())
-    f.save(get_store_path() + "/" + s + "|" + f.filename)
-    return "Ok"
-
-
-def get_store_path():
-    return sys.path[0] + "/files"
 
 
 # ======== Main ============================================================== #
