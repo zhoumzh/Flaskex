@@ -57,7 +57,7 @@
                             <div class="am-form-group">
                                 <label for="user-intro" class="am-u-sm-1 am-form-label">结果文本:</label>
                                 <div class="am-u-sm-11">
-                                    <textarea id="t-res" style="overflow:auto;" readonly class="" rows="10" id="user-intro" placeholder="don't input"></textarea>
+                                    <textarea id="t-res" style="overflow:auto;" class="" rows="10" id="user-intro" placeholder="don't input"></textarea>
                                 </div>
                             </div>
                             <div class="am-form-group" style="text-align: center;">
@@ -111,13 +111,12 @@
             // after: !!$("#postfix").val() ? $("#postfix").val() : $("#commonPostfix option:selected").text()
             after: $("#postfix").val()
         }
-        let reqStr = JSON.stringify(req)
-        $.post('/do-quote-strs', reqStr,
+        $("#t-res").html('')
+        $.post('/do-quote-strs', req,
             function (data) {
-                $("#t-res").val(eval(data))
+                eval(data).forEach(l=>$("#t-res").append(l+'\n'))
             }
         )
-            ;
     }
     function selectChangedFn(value) {
         if (value === "5") {

@@ -52,9 +52,10 @@ def text_formatter():
     return render_template('text_formator.html')
 
 
-@app.route('/tables', methods=['GET', 'POST'])
-def tables():
+@app.route('/file-feed-back', methods=['GET'])
+def file_feed_back():
     return render_template('tables.html')
+
 
 
 @app.route("/logout")
@@ -72,11 +73,11 @@ def do_get_tables():
 
 @app.route('/do-quote-strs', methods=['POST'])
 def do_quote_str():
-    data = json.loads(request.get_data(as_text=True))
+    data = request.form
     pre = '"' if data['pre'] is None else data['pre']
     after = '"' if data['after'] is None else data['after']
     ls = qs.quote(data['txt'], data['df'], pre, after)
-    return json.dumps('\n'.join(ls), ensure_ascii=False)
+    return json.dumps(ls, ensure_ascii=False)
 
 
 @app.route('/do-format-msl', methods=['POST'])
@@ -87,7 +88,7 @@ def do_format_sql():
     except Exception as ex:
         traceback.print_exc()
         return "处理发生异常:" + str(ex)
-    return json.dumps('\n'.join(res), ensure_ascii=False)
+    return json.dumps(res, ensure_ascii=False)
 
 
 # ======== Main ============================================================== #
