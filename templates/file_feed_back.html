@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="container-fluid">
+
+    <!-- 内容区域 -->
+    <div class="am-cf">
+        <div class="row">
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"></span> File Feed Back</div>
+            </div>
+        </div>
+    </div>
+    <div class="row-content am-cf">
+        <div class="row">
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                <div class="widget am-cf">
+                    <div class="widget-body am-fr">
+                        <form class="am-form tpl-form-line-form">
+                            <table class="am-table">
+                                <thead>
+                                    <tr>
+                                        <th>文件名</th>
+                                        <th>上传时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td>Amaze UI</td>
+                                        <td>2012-10-01</td>
+                                        <td>下载</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Amaze UI</td>
+                                        <td>2012-10-01</td>
+                                        <td>下载</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                            <div class="am-form-group" style="text-align: center;">
+                                <button id="upload-button" style="float: none;" type="button" class="page-header-button"><span class="am-icon-copy"></span> Upload</button>
+                                <button id="refresh-button" style="float: none;" type="button" class="page-header-button"><span class="am-icon-refresh"></span> Refresh</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">    
+    //用于展示页面的函数
+        function getList() {
+            init_chart();       // 给予ecahrts的绘图
+            $.getJSON('/fileList', function (res) {         //请求userlist接口获取数据
+                var str = "";
+                $.each(res, function (i, v) {
+                    str += "<tr>";                        // str拼接出一个表格
+                    str += "<td>" + v[0] + "</td>";
+                    str += "<td>" + v[1] + "</td>";
+                    str += '<td> <button data-name="' + v[0] + '" class="delete-btn">delete</button></td>'
+                    str += '<td> <button data-name="' + v[0] +'" data-age="'+ v[1] + '" class="edit-btn">edit</button></td>'
+                    str += "</tr>";
+                });
+
+                $('#user-list').html(str)      //找到id 为 user-list的设置他的html为str
+            })
+        }
+
+        getList();
+
+        $("#refresh-button").on('click', function() {
+            getList();
+        });
+
+        $("#upload-button").on('click',function(){    //点击添加按钮的事件
+            var name = $('.user-input').val();      //获取值
+            var age = $('.age-input').val();
+            gName = name;
+            if(name && age){     // 输入框有输入name和age
+                $.get('/add?name=' + name +'&age='+age,function(res){   //发生请求
+                    if(res=='ok'){
+                        $('.user-input').val('');    //添加成功把输入框亲空
+                        $('.age-input').val('');
+                        getList();          // 打印列表
+                    }
+                })
+            }
+            else{
+                alert("please input username and age!");   // 输入框中没输入name 或 age 直接 alter一个报错
+            }
+        });
+</script>
+{% endblock %}

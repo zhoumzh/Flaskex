@@ -54,7 +54,7 @@ def text_formatter():
 
 @app.route('/file-feed-back', methods=['GET'])
 def file_feed_back():
-    return render_template('tables.html')
+    return render_template('file_feed_back.html')
 
 
 
