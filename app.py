@@ -2,6 +2,7 @@
 
 import json
 import os
+import sys
 import time
 import traceback
 from server import update_codes as git_uc
@@ -91,22 +92,24 @@ def do_format_sql():
     return json.dumps(res, ensure_ascii=False)
 
 
-Server_File_Path = "/Users/master/chj/data/flask/files"
-
-
 @app.route('/do-feed-back', methods=['POST'])
 def do_feed_back():
     f = request.files['file']
-    exists = os.path.exists(Server_File_Path)
+    exists = os.path.exists(get_store_path())
     # 判断结果
     if not exists:
-        os.makedirs(Server_File_Path)
+        os.makedirs(get_store_path())
     s = time.strftime("%Y%m%d%H%M%S", time.localtime())
-    f.save(Server_File_Path + "/" + s + "|" + f.filename)
+    f.save(get_store_path() + "/" + s + "|" + f.filename)
     return "Ok"
+
+
+def get_store_path():
+    return sys.path[0] + "/files"
 
 
 # ======== Main ============================================================== #
 if __name__ == "__main__":
+    print(sys.path[0])
     print("服务启动@", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     app.run(debug=True, use_reloader=True, host="0.0.0.0")
