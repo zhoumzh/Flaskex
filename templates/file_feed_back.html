@@ -16,44 +16,31 @@
                     <div class="widget-body am-fr">
                         <div class="container-fluid">
                             <code>curl -F "file=@/Users/master/Downloads/QQ20190309-190302@2x.png" http://localhost:5000/do-feed-back</code>
-                        <!-- <form action="/do-feed-back" method="POST" enctype="multipart/form-data">
-                            <input type="file" name="file" accept=".jpg,.png"/>
-                            <input type="submit"/>
-                        </form> -->
                         <div class="am-form-group am-form-file" style="margin-top: 10px;">
                             <button type="button" class="am-btn am-btn-danger am-btn-sm">
                                 <i class="am-icon-cloud-upload"></i> 选择要上传的文件
                             </button>
-                            <input id="doc-form-file" type="file" multiple>
+                            <input id="doc-form-file" type="file" multiple style="width: 161px;"/>
                         </div>
-                        <div id="file-list"></div>
+                        <div id="upload-file">
+                            <font color="red">请选择文件</font>
+                        </div>
                         <form class="am-form tpl-form-line-form">
                             <table class="am-table">
                                 <thead>
                                     <tr>
                                         <th>文件名</th>
-                                        <th>上传时间</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="file-list">
 
-                                    <tr>
-                                        <td>Amaze UI</td>
-                                        <td>2012-10-01</td>
-                                        <td>下载</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Amaze UI</td>
-                                        <td>2012-10-01</td>
-                                        <td>下载</td>
-                                    </tr>
                                     
                                 </tbody>
                             </table>
                             <div class="am-form-group" style="text-align: center;">
                                 <button id="upload-button" style="float: none;" type="button" class="page-header-button"><span class="am-icon-copy"></span> Upload</button>
-                                <button id="refresh-button" style="float: none;" type="button" class="page-header-button"><span class="am-icon-refresh"></span> Refresh</button>
+                                <button id="refresh-button" style="float: none;" type="button" class="page-header-button"><span class="am-icon-refresh" onclick="getList()"></span> Refresh</button>
                             </div>
                         </form>
                     </div>
@@ -67,19 +54,21 @@
 <script type="text/javascript">    
     //用于展示页面的函数
         function getList() {
-            $.getJSON('/fileList', function (res) {         //请求userlist接口获取数据
+            $.getJSON('/list-feed-file', function (res) {         //请求filelist接口获取数据
                 var str = "";
                 $.each(res, function (i, v) {
                     str += "<tr>";                        // str拼接出一个表格
-                    str += "<td>" + v[0] + "</td>";
-                    str += "<td>" + v[1] + "</td>";
-                    str += '<td> <button data-name="' + v[0] + '" class="delete-btn">delete</button></td>'
-                    str += '<td> <button data-name="' + v[0] +'" data-age="'+ v[1] + '" class="edit-btn">edit</button></td>'
+                    str += "<td>" + v + "</td>";
+                    str += '<td> <button class="am-btn am-btn-primary" onclick="downloadFile(\'' + v + '\')">下载</button></td>'
                     str += "</tr>";
                 });
 
-                $('#user-list').html(str)      //找到id 为 user-list的设置他的html为str
+                $('#file-list').html(str)      //找到id 为 file-list的设置他的html为str
             })
+        }
+
+        function downloadFile(filename) {
+            window.open('/download-feed-file?fn=' + filename);
         }
 
         $(document).ready(function() {
@@ -87,10 +76,12 @@
         getList();
         $('#doc-form-file').on('change', function() {
             var fileNames = '';
-            $.each(this.files, function() {
-                fileNames += '<span class="am-badge">' + this.name + '</span> ';
-            });
-            $('#file-list').html(fileNames);
+            // $.each(this.files, function() {
+            //     fileNames += '<span class="am-badge">' + this.name + '</span> ';
+            // });
+            //一次只允许上传一个文件
+            fileNames = this.files[0].name
+            $('#upload-file').html(fileNames);
         });
 
         $("#refresh-button").on('click', function() {
@@ -98,21 +89,24 @@
         });
 
         $("#upload-button").on('click',function(){    //点击添加按钮的事件
-            var name = $('.user-input').val();      //获取值
-            var age = $('.age-input').val();
-            gName = name;
-            if(name && age){     // 输入框有输入name和age
-                $.get('/add?name=' + name +'&age='+age,function(res){   //发生请求
-                    if(res=='ok'){
-                        $('.user-input').val('');    //添加成功把输入框亲空
-                        $('.age-input').val('');
-                        getList();          // 打印列表
+            var formData = new FormData();
+            formData.append("file", $("#doc-form-file")[0].files[0])
+            $.ajax({
+                url:'/do-feed-back', /*接口域名地址*/
+                type:'post',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success:function(res){
+                    if(res == "Ok"){
+                        alert("成功")
+                        $('#upload-file').html("<font color=\"red\">请选择文件</font>")
+                        getList()
+                    }else {
+                        alert("失败")
                     }
-                })
-            }
-            else{
-                alert("please input username and age!");   // 输入框中没输入name 或 age 直接 alter一个报错
-            }
+                }
+            });
         });
     });
 </script>
