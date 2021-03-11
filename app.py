@@ -52,9 +52,10 @@ def text_formatter():
     return render_template('text_formator.html')
 
 
-@app.route('/tables', methods=['GET', 'POST'])
-def tables():
+@app.route('/file-feed-back', methods=['GET'])
+def file_feed_back():
     return render_template('tables.html')
+
 
 
 @app.route("/logout")
