@@ -12,9 +12,11 @@ from flask import Flask, redirect, url_for, request, session, render_template, s
 from scripts.functions import formate_mybatis as fm
 from scripts.functions import get_sql_table as gst
 from scripts.functions import quote_str_list as qs
+from scripts.feedback import ffb_opt
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
+app.register_blueprint(ffb_opt)
 
 
 # Heroku

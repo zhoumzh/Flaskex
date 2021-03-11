@@ -3,12 +3,14 @@ import os
 import sys
 import time
 
-from flask import request, Response
+from flask import request, Response, Flask, Blueprint
 
-from app import app
+app = Flask(__name__)
+app.secret_key = os.urandom(12)
+ffb_opt = Blueprint("feedfileback", __name__)
 
 
-@app.route('/do-feed-back', methods=['POST'])
+@ffb_opt.route('/do-feed-back', methods=['POST'])
 def do_feed_back():
     f = request.files['file']
     exists = os.path.exists(get_store_path())
@@ -20,7 +22,7 @@ def do_feed_back():
     return "Ok"
 
 
-@app.route('/list-feed-file', methods=['GET'])
+@ffb_opt.route('/list-feed-file', methods=['GET'])
 def list_feed_file():
     res = []
     for files in os.walk(get_store_path()):
@@ -29,7 +31,7 @@ def list_feed_file():
     return json.dumps(res, ensure_ascii=False)
 
 
-@app.route("/download-feed-file", methods=['GET'])
+@ffb_opt.route("/download-feed-file", methods=['GET'])
 def download_feed_file():
     filename = request.args.get('fn')
 
