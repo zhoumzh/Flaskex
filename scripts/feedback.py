@@ -18,7 +18,7 @@ def do_feed_back():
     if not exists:
         os.makedirs(get_store_path())
     s = time.strftime("%Y%m%d%H%M%S", time.localtime())
-    f.save(get_store_path() + "/" + s + "|" + f.filename)
+    f.save(get_store_path() + "/" + s + "-" + f.filename)
     return "Ok"
 
 

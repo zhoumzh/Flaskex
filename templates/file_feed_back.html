@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block body %}
+
+    <!-- 内容区域 -->
+    <div class="am-cf">
+        <div class="row">
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"></span> File Feed Back</div>
+            </div>
+        </div>
+    </div>
+    <div class="row-content am-cf">
+        <div class="row">
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                <div class="widget am-cf">
+                    <div class="widget-body am-fr">
+                        <div class="container-fluid">
+                            <code>curl -F "file=@/Users/master/Downloads/QQ20190309-190302@2x.png" http://localhost:5000/do-feed-back</code>
+                        <div class="am-form-group am-form-file" style="margin-top: 10px;">
+                            <button type="button" class="am-btn am-btn-danger am-btn-sm">
+                                <i class="am-icon-cloud-upload"></i> 选择要上传的文件
+                            </button>
+                            <input id="doc-form-file" type="file" multiple style="width: 161px;"/>
+                        </div>
+                        <div id="upload-file">
+                            <font color="red">请选择文件</font>
+                        </div>
+                        <form class="am-form tpl-form-line-form">
+                            <table class="am-table">
+                                <thead>
+                                    <tr>
+                                        <th>文件名</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="file-list">
+
+                                    
+                                </tbody>
+                            </table>
+                            <div class="am-form-group" style="text-align: center;">
+                                <button id="upload-button" style="float: none;" type="button" class="page-header-button"><span class="am-icon-copy"></span> Upload</button>
+                                <button id="refresh-button" style="float: none;" type="button" class="page-header-button"><span class="am-icon-refresh" onclick="getList()"></span> Refresh</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">    
+    //用于展示页面的函数
+        function getList() {
+            $.getJSON('/list-feed-file', function (res) {         //请求filelist接口获取数据
+                var str = "";
+                $.each(res, function (i, v) {
+                    str += "<tr>";                        // str拼接出一个表格
+                    str += "<td>" + v + "</td>";
+                    str += '<td> <button class="am-btn am-btn-primary" onclick="downloadFile(\'' + v + '\')">下载</button></td>'
+                    str += "</tr>";
+                });
+
+                $('#file-list').html(str)      //找到id 为 file-list的设置他的html为str
+            })
+        }
+
+        function downloadFile(filename) {
+            window.open('/download-feed-file?fn=' + filename);
+        }
+
+        $(document).ready(function() {
+            
+        getList();
+        $('#doc-form-file').on('change', function() {
+            var fileNames = '';
+            // $.each(this.files, function() {
+            //     fileNames += '<span class="am-badge">' + this.name + '</span> ';
+            // });
+            //一次只允许上传一个文件
+            fileNames = this.files[0].name
+            $('#upload-file').html(fileNames);
+        });
+
+        $("#refresh-button").on('click', function() {
+            getList();
+        });
+
+        $("#upload-button").on('click',function(){    //点击添加按钮的事件
+            var formData = new FormData();
+            formData.append("file", $("#doc-form-file")[0].files[0])
+            $.ajax({
+                url:'/do-feed-back', /*接口域名地址*/
+                type:'post',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success:function(res){
+                    if(res == "Ok"){
+                        alert("成功")
+                        $('#upload-file').html("<font color=\"red\">请选择文件</font>")
+                        getList()
+                    }else {
+                        alert("失败")
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
