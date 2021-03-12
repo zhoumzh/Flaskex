@@ -5,7 +5,7 @@
     <div class="am-cf">
         <div class="row">
             <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
-                <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"></span> File Feed Back</div>
+                <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"></span> File Temporary shelter</div>
             </div>
         </div>
     </div>
@@ -15,7 +15,15 @@
                 <div class="widget am-cf">
                     <div class="widget-body am-fr">
                         <div class="container-fluid">
-                            <code>curl -F "file=@/Users/master/Downloads/QQ20190309-190302@2x.png" http://localhost:5000/do-feed-back</code>
+                            <h2 style="color: #f9d094;">发送文件回来</h2>
+                            <div style="height: 30px;width:767px;background-color: #2e2a24;border-radius:0 .4em .4em  0;">
+                                <code id="codeText" style='font-family: "Monaco", "Menlo", monospace;
+                                font-size: 11px;height:30px;background-color: #2e2a24;border-radius: .4em 0 0 .4em ;'>
+                                    curl -F "file=@/Users/master/Downloads/QQ20190309-190302@2x.png" http://localhost:5000/do-feed-back
+                                </code>
+                                <button id="copy" aria-label="Copy to clipboard" style="height:30px;background-color: #2e2a24;border-radius:0 .4em .4em  0;">📋</button>
+                            </div>
+                            <textarea id="tempText" style="position: absolute;top: 0;left: 0;opacity: 0;z-index: -10;"></textarea>
                         <div class="am-form-group am-form-file" style="margin-top: 10px;">
                             <button type="button" class="am-btn am-btn-danger am-btn-sm">
                                 <i class="am-icon-cloud-upload"></i> 选择要上传的文件
@@ -39,7 +47,7 @@
                                 </tbody>
                             </table>
                             <div class="am-form-group" style="text-align: center;">
-                                <button id="upload-button" style="float: none;" type="button" class="page-header-button"><span class="am-icon-copy"></span> Upload</button>
+                                <button id="upload-button" style="float: none;" type="button" class="page-header-button"><span class="am-icon-cloud-upload"></span> Upload</button>
                                 <button id="refresh-button" style="float: none;" type="button" class="page-header-button"><span class="am-icon-refresh" onclick="getList()"></span> Refresh</button>
                             </div>
                         </form>
@@ -59,7 +67,7 @@
                 $.each(res, function (i, v) {
                     str += "<tr>";                        // str拼接出一个表格
                     str += "<td>" + v + "</td>";
-                    str += '<td> <button class="am-btn am-btn-primary" onclick="downloadFile(\'' + v + '\')">下载</button></td>'
+                    str += '<td> <button class="am-btn am-btn-primary" onclick="downloadFile(\'' + v + '\')">下载</button><button class="am-btn am-btn-danger" onclick="deleteFile(\'' + v + '\')">删除</button></td>'
                     str += "</tr>";
                 });
 
@@ -71,43 +79,71 @@
             window.open('/download-feed-file?fn=' + filename);
         }
 
+        function deleteFile (filename){
+                $.ajax({
+                    url:'/delete-feed-file?fn='+filename,
+                    type:'get',
+                    data: null,
+                    contentType: false,
+                    processData: false,
+                    success:function(res){
+                        if(res == "Ok"){
+                            alert("成功")
+                            getList()
+                        }else {
+                            alert("失败")
+                        }
+                    }
+                });
+            }
+
         $(document).ready(function() {
             
-        getList();
-        $('#doc-form-file').on('change', function() {
-            var fileNames = '';
-            // $.each(this.files, function() {
-            //     fileNames += '<span class="am-badge">' + this.name + '</span> ';
-            // });
-            //一次只允许上传一个文件
-            fileNames = this.files[0].name
-            $('#upload-file').html(fileNames);
-        });
-
-        $("#refresh-button").on('click', function() {
             getList();
-        });
-
-        $("#upload-button").on('click',function(){    //点击添加按钮的事件
-            var formData = new FormData();
-            formData.append("file", $("#doc-form-file")[0].files[0])
-            $.ajax({
-                url:'/do-feed-back', /*接口域名地址*/
-                type:'post',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success:function(res){
-                    if(res == "Ok"){
-                        alert("成功")
-                        $('#upload-file').html("<font color=\"red\">请选择文件</font>")
-                        getList()
-                    }else {
-                        alert("失败")
-                    }
-                }
+            $('#doc-form-file').on('change', function() {
+                var fileNames = '';
+                // $.each(this.files, function() {
+                //     fileNames += '<span class="am-badge">' + this.name + '</span> ';
+                // });
+                //一次只允许上传一个文件
+                fileNames = this.files[0].name
+                $('#upload-file').html(fileNames);
             });
-        });
-    });
+
+            $("#refresh-button").on('click', function() {
+                getList();
+            });
+
+            $('#copy').click(function () {
+                var text = document.getElementById("codeText").innerHTML;
+                var tempText = document.getElementById("tempText");
+                tempText.value = text
+                $("#tempText").select();
+                document.execCommand("Copy");
+                $('#copy').popover({content: 'Copie Success!', theme: 'success'});
+                $(this).popover('open');
+            });
+
+            $("#upload-button").on('click',function(){    //点击添加按钮的事件
+                var formData = new FormData();
+                formData.append("file", $("#doc-form-file")[0].files[0])
+                $.ajax({
+                    url:'/do-feed-back', /*接口域名地址*/
+                    type:'post',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success:function(res){
+                        if(res == "Ok"){
+                            alert("成功")
+                            $('#upload-file').html("<font color=\"red\">请选择文件</font>")
+                            getList()
+                        }else {
+                            alert("失败")
+                        }
+                    }
+                });
+            });
+        })
 </script>
 {% endblock %}

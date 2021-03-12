@@ -4,6 +4,7 @@ import sys
 import time
 
 from flask import request, Response, Flask, Blueprint
+from urllib.parse import quote
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
@@ -46,9 +47,16 @@ def download_feed_file():
                 yield data
 
     response = Response(send_file(), content_type='application/octet-stream')
-    response.headers["Content-disposition"] = 'attachment; filename=%s' % filename
+    response.headers["Content-disposition"] = 'attachment; filename=%s' % quote(filename.encode('utf-8'))
     return response
 
+
+@ffb_opt.route("/delete-feed-file", methods=['GET'])
+def delete_feed_file():
+    filename = request.args.get('fn')
+    store_path = os.path.join(get_store_path(), filename)
+    os.remove(store_path)
+    return "Ok"
 
 def get_store_path():
     return sys.path[0] + "/files"
