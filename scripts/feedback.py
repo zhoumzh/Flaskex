@@ -4,6 +4,7 @@ import sys
 import time
 
 from flask import request, Response, Flask, Blueprint
+from urllib.parse import quote
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
@@ -46,7 +47,7 @@ def download_feed_file():
                 yield data
 
     response = Response(send_file(), content_type='application/octet-stream')
-    response.headers["Content-disposition"] = 'attachment; filename=%s' % filename
+    response.headers["Content-disposition"] = 'attachment; filename=%s' % quote(filename.encode('utf-8'))
     return response
 
 
