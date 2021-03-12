@@ -51,5 +51,12 @@ def download_feed_file():
     return response
 
 
+@ffb_opt.route("/delete-feed-file", methods=['GET'])
+def delete_feed_file():
+    filename = request.args.get('fn')
+    store_path = os.path.join(get_store_path(), filename)
+    os.remove(store_path)
+    return "Ok"
+
 def get_store_path():
     return sys.path[0] + "/files"
