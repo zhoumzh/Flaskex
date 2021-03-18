@@ -16,12 +16,12 @@
                     <div class="widget-body am-fr">
                         <div class="container-fluid">
                             <h2 style="color: #f9d094;">linux回传文件</h2>
-                            <div style="height: 30px;width:767px;background-color: #2e2a24;border-radius:0 .4em .4em  0;">
+                            <div style="height: 30px;width:867px;background-color: #2e2a24;border-radius:.4em .4em .4em .4em; display: inline-flex;">
                                 <code id="codeText" style='font-family: "Monaco", "Menlo", monospace;
                                 font-size: 11px;height:30px;background-color: #2e2a24;border-radius: .4em 0 0 .4em ;'>
                                     curl -F "file=@/Users/master/Downloads/QQ20190309-190302@2x.png" http://devmng.chj.cloud/do-feed-back
                                 </code>
-                                <button id="copy" aria-label="Copy to clipboard" style="height:30px;background-color: #2e2a24;border-radius:0 .4em .4em  0;">📋</button>
+                                <button id="copy" aria-label="Copy to clipboard" style="height:30px;background-color: #2e2a24;border-radius:0 .4em .4em  0;margin-left: auto;">📋</button>
                             </div>
                             <textarea id="tempText" style="position: absolute;top: 0;left: 0;opacity: 0;z-index: -10;"></textarea>
                         <div class="am-form-group am-form-file" style="margin-top: 10px;">
@@ -67,7 +67,7 @@
                 $.each(res, function (i, v) {
                     str += "<tr>";                        // str拼接出一个表格
                     str += "<td>" + v + "</td>";
-                    str += '<td> <button class="am-btn am-btn-primary" onclick="downloadFile(\'' + v + '\')">下载</button><button class="am-btn am-btn-danger" onclick="deleteFile(\'' + v + '\')">删除</button></td>'
+                    str += '<td> <button class="am-btn am-btn-primary" onclick="downloadFile(\'' + v + '\')">下载</button><button class="am-btn am-btn-success" onclick="copyWget(\'' + v + '\')">复制</button><button class="am-btn am-btn-danger" onclick="deleteFile(\'' + v + '\')">删除</button></td>'
                     str += "</tr>";
                 });
 
@@ -77,6 +77,14 @@
 
         function downloadFile(filename) {
             window.open('/download-feed-file?fn=' + filename);
+        }
+
+        function copyWget(filename) {
+            var tempText = document.getElementById("tempText");
+            tempText.value = 'wget \'http://devmng.chj.cloud/download-feed-file?fn=' + filename + '\' -O \'' + filename + '\'';
+            $("#tempText").select();
+            document.execCommand("Copy");
+            alert("已复制！")
         }
 
         function deleteFile (filename){
