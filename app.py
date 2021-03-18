@@ -98,4 +98,4 @@ def do_format_sql():
 if __name__ == "__main__":
     print(sys.path[0])
     print("服务启动@", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-    app.run(debug=True, use_reloader=True, host="0.0.0.0")
+    app.run(debug=True, use_reloader=True, host="0.0.0.0",port=80)
