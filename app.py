@@ -97,5 +97,10 @@ def do_format_sql():
 # ======== Main ============================================================== #
 if __name__ == "__main__":
     print(sys.path[0])
+    _port = 80
+    try:
+        _port = int(sys.argv[1]) if int(sys.argv[1]) > 1024 else 80
+    except ValueError:
+        pass
     print("服务启动@", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-    app.run(debug=True, use_reloader=True, host="0.0.0.0",port=80)
+    app.run(debug=True, use_reloader=True, host="0.0.0.0", port=_port)
