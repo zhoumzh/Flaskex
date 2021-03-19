@@ -100,7 +100,7 @@ if __name__ == "__main__":
     _port = 80
     try:
         _port = int(sys.argv[1]) if int(sys.argv[1]) > 1024 else 80
-    except ValueError:
+    except (ValueError, IndexError):
         pass
     print("服务启动@", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     app.run(debug=True, use_reloader=True, host="0.0.0.0", port=_port)
