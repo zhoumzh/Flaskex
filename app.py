@@ -59,6 +59,11 @@ def file_feed_back():
     return render_template('file_feed_back.html')
 
 
+@app.route('/text-hash', methods=['GET'])
+def text_hash_path():
+    return render_template('text_hash.html')
+
+
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
@@ -92,6 +97,16 @@ def do_format_sql():
         traceback.print_exc()
         return "处理发生异常:" + str(ex)
     return json.dumps(res, ensure_ascii=False)
+
+
+@app.route('/do-text-hash', methods=['POST'])
+def do_hash_text():
+    data = request.form
+    text = str(data['txt']).split("\n")
+    texts = []
+    for line in text:
+        texts.append(hash(line))
+    return json.dumps(texts, ensure_ascii=False)
 
 
 # ======== Main ============================================================== #

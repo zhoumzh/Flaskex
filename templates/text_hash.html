@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="container-fluid">
+
+    <!-- 内容区域 -->
+    <div class="am-cf">
+        <div class="row">
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"></span> Text Quote</div>
+            </div>
+        </div>
+    </div>
+    <div class="row-content am-cf">
+        <div class="row">
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                <div class="widget am-cf">
+                    <div class="widget-body am-fr">
+                        <form class="am-form tpl-form-line-form">
+                            <div class="am-form-group">
+                                <label for="user-intro" class="am-u-sm-1 am-form-label">原始文本:</label>
+                                <div class="am-u-sm-11">
+                                    <textarea id="sourceText" style="white-space:nowrap; overflow:auto;"  class="" rows="10" id="user-intro" placeholder="please input"></textarea>
+                                </div>
+                            </div>
+                            <div class="am-form-group" style="text-align: center; margin-top: 10px;">
+                                <button id="format" style="float: none;" type="button" class="page-header-button"><span class="am-icon-paint-brush"></span>开始处理</button>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="user-intro" class="am-u-sm-1 am-form-label">结果文本:</label>
+                                <div class="am-u-sm-11">
+                                    <textarea id="t-res" style="overflow:auto;" class="" rows="10" id="user-intro" placeholder="don't input"></textarea>
+                                </div>
+                            </div>
+                            <div class="am-form-group" style="text-align: center;">
+                                <button id="copie" style="float: none;" type="button" class="page-header-button"><span class="am-icon-copy"></span> Copie</button>
+                                <button id="reset" style="float: none;" type="button" class="page-header-button"><span class="am-icon-refresh"></span> Reset</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    let isCommon = true;
+    $(document).ready(function() {
+            $('#format').click(function () {
+                doGet();
+            });
+            $("#sourceText").blur(function(){
+                this.style.overflow="hidden";
+            });
+            $("#sourceText").focus(function(){
+                this.style.overflow="auto";
+            });
+            $("#t-res").blur(function(){
+                this.style.overflow="hidden";
+            });
+            $("#t-res").focus(function(){
+                this.style.overflow="auto";
+            });
+            $('#copie').click(function () {
+                $("#t-res").select();
+                document.execCommand("Copy");
+                $('#copie').popover({content: 'Copie Success!', theme: 'success'});
+                $(this).popover('open');
+            });
+            $("#reset").focus(function(){
+                $("#t-res").val("");
+            });
+        });
+    function doGet() {
+        let req = {
+            txt: $("#sourceText").val(),
+            df: isCommon ? $("#commonDf option:selected").text() : $("#df").val()
+        }
+        $("#t-res").html('')
+        $.post('/do-text-hash', req,
+            function (data) {
+                eval(data).forEach(l=>$("#t-res").append(l+'\n'))
+            }
+        )
+    }
+    function selectChangedFn(value) {
+        if (value === "5") {
+            $("#df").css("display", "inline")
+            $("#back").css("display", "inline")
+            $("#commonDf").css("display", "none");
+            isCommon = false
+        } else {
+
+        }
+    }
+    function refreshFn() {
+        $("#commonDf").val('1')
+        $("#commonDf").css("display", "block")
+        $("#df").css("display", "none");
+        $("#back").css("display", "none")
+    }
+</script>
+{% endblock %}
+
+{% block styles %}
+<style>
+</style>
+{% endblock %}
