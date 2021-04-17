@@ -13,10 +13,12 @@ from scripts.functions import formate_mybatis as fm
 from scripts.functions import get_sql_table as gst
 from scripts.functions import quote_str_list as qs
 from scripts.feedback import ffb_opt
+from scripts.hash_text import shb_opt
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
 app.register_blueprint(ffb_opt)
+app.register_blueprint(shb_opt)
 
 
 # Heroku
@@ -97,16 +99,6 @@ def do_format_sql():
         traceback.print_exc()
         return "处理发生异常:" + str(ex)
     return json.dumps(res, ensure_ascii=False)
-
-
-@app.route('/do-text-hash', methods=['POST'])
-def do_hash_text():
-    data = request.form
-    text = str(data['txt']).split("\n")
-    texts = []
-    for line in text:
-        texts.append(hash(line))
-    return json.dumps(texts, ensure_ascii=False)
 
 
 # ======== Main ============================================================== #
